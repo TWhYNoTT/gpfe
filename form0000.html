@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استمارة تسجيل</title>
+    <link rel="stylesheet" href="form0000.css">
+</head>
+
+<body>
+    <div class="title">
+        <h2>نشاط الجواله والخدمة العامة :-</h2>
+    </div>
+    <div class="container">
+        <form method="POST" action="https://graduations.onrender.com/api/activity">
+            <div class="basic-data">
+                <fieldset>
+                    <legend>البيانات الاساسية*</legend>
+                    <label for="A">اسم الطالب رباعي :</label>
+                    <input type="text" id="A" placeholder="اسم الطالب رباعي :" requiredrequired name="studentName"
+                        autofocus>
+                    <label for="B">عنوان الاقامة اثناء الدراسة :</label>
+                    <input type="text" id="B" placeholder="عنوان الاقامة اثناء الدراسة :" required
+                        name="addressDuringStudy">
+                    <label for="C">عنوان الاقامه اثناء الاجازة:</label>
+                    <input type="text" id="C" placeholder="عنوان الاقامه اثناءالاجازة :" required
+                        name="addressDuringVacation">
+                    <label for="D">رقم التليفون :</label>
+                    <input type="text" id="D" placeholder="رقم التليفون :" required name="phoneNumber">
+                    <label for="E">المستوي :</label>
+                    <select name="level" id="E" required>
+                        <option value="1">الاول </option>
+                        <option value="2">الثاني</option>
+                        <option value="3">الثالث</option>
+                        <option value="4">الرابع</option>
+                    </select>
+                    <input type="text" required name="activityName" value="نشاط الجواله والخدمة العامة"
+                        style="visibility: hidden;">
+                </fieldset>
+            </div>
+            <div class="tex">
+                <h3>عزيزي الطالب ..... عزيزتي الطالبة</h3>
+                <q>اذا كانت لديك الموهبة في ممارسة اي من الانشطة الاتيه
+                    . برجاء اختيار احد هذه المهارات التي تود المشاركة فيه
+                </q>
+            </div>
+            <div class="skills">
+                <fieldset>
+                    <legend>المواهب*</legend>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="1" name="activities[]"
+                            value="الاشتراك في عشيرة الجوالة والخدمة العامة بالكلية">
+                        <label for="1">الاشتراك في عشيرة الجوالة والخدمة العامة بالكلية </label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="2" name="activities[]" value="اخري">
+                        <label for="2">اخري تذكر</label>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="save">
+                <input type="reset" name="remove" value="محو النموذج">
+                <input type="submit" name="save" value="تسجيل">
+            </div>
+        </form>
+    </div>
+    <script src="submit.js"></script>
+</body>
+
+</html>

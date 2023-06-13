@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Form</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+
+
+        .form-container {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">الرجوع الى الصفحة الرئيسية</a>
+        </div>
+    </header>
+    <div class="form-container">
+        <h1>Registration Form</h1>
+        <form id="registrationForm">
+            <div>
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" required>
+                <span class="error" id="firstNameError"></span>
+            </div>
+            <div>
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" required>
+                <span class="error" id="lastNameError"></span>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <span class="error" id="emailError"></span>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <span class="error" id="passwordError"></span>
+            </div>
+            <button type="submit">Register</button>
+            <span class="error" id="error"></span>
+        </form>
+    </div>
+    <script>
+        // Check if a token already exists in the localStorage
+        const token = localStorage.getItem("token");
+        if (token) {
+            // Redirect to the home page or the dashboard
+            window.location.href = "/activities.html"; // Change to the desired URL
+        }
+
+        const registrationForm = document.getElementById('registrationForm');
+        const firstName = document.getElementById('firstName');
+        const lastName = document.getElementById('lastName');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const firstNameError = document.getElementById('firstNameError');
+        const lastNameError = document.getElementById('lastNameError');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+
+        // Add event listener for form submit
+        registrationForm.addEventListener('submit', event => {
+            event.preventDefault();
+
+            // Validate form data
+            const formData = {
+                firstName: firstName.value,
+                lastName: lastName.value,
+                email: email.value,
+                password: password.value
+            };
+            const validation = validateFormData(formData);
+            if (validation.isValid) {
+                displayFormErrors(validation.errors);
+                return;
+            }
+
+            // Send POST request to server
+            fetch('https://graduations.onrender.com/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(async response => {
+                    const res = await response.json()
+                    if (!response.ok) {
+                        throw new Error(res.message);
+                    }
+                    return res;
+                })
+                .then(data => {
+                    // Redirect to login page or show a success message
+                    window.location.href = 'login.html';
+                })
+                .catch(error => {
+                    let errors = { error }
+                    displayFormErrors(errors)
+                });
+        });
+
+        // Validate form data
+        function validateFormData(formData) {
+            const errors = {};
+            if (!formData.firstName || formData.firstName.length < 3) {
+                errors.firstName = 'First name must be at least 3 characters long.';
+            }
+            if (!formData.lastName || formData.lastName.length < 3) {
+                errors.lastName = 'Last name must be at least 3 characters long.';
+            }
+            if (!formData.email || !formData.email.match(/.+@.+..+/)) {
+                errors.email = 'Email must be a valid email address.';
+            }
+            if (!formData.password || !formData.password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{}|;':",.\/<>\?]).{8,}$/)) {
+                errors.password = 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.';
+            }
+            return {
+                isValid: Object.keys(errors).length != 0,
+                errors: errors
+            };
+        }
+
+        // Display form errors
+        function displayFormErrors(errors) {
+            firstNameError.textContent = errors.firstName || '';
+            lastNameError.textContent = errors.lastName || '';
+            emailError.textContent = errors.email || '';
+            passwordError.textContent = errors.password || '';
+            error.textContent = errors.error || '';
+        }
+    </script>
+</body>
+
+</html>

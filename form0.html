@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استمارة تسجيل</title>
+    <link rel="stylesheet" href="form0.css">
+</head>
+
+<body>
+    <div class="title">
+        <h2>النشاط الرياضي:-</h2>
+    </div>
+    <div class="container">
+        <form method="POST" action="https://graduations.onrender.com/api/activity">
+            <div class="basic-data">
+                <fieldset>
+                    <legend>البيانات الاساسية*</legend>
+
+                    <label for="A">اسم الطالب رباعي :</label>
+                    <input type="text" id="A" placeholder="اسم الطالب رباعي :" required name="studentName" autofocus>
+                    <label for="B">عنوان الاقامة اثناء الدراسة :</label>
+                    <input type="text" id="B" placeholder="عنوان الاقامة اثناء الدراسة :" required
+                        name="addressDuringStudy">
+                    <label for="C">عنوان الاقامه اثناء الاجازة:</label>
+                    <input type="text" id="C" placeholder="عنوان الاقامه اثناءالاجازة :" required
+                        name="addressDuringVacation">
+                    <label for="D">رقم التليفون :</label>
+                    <input type="text" id="D" placeholder="رقم التليفون :" required name="phoneNumber">
+                    <label for="E">المستوي :</label>
+                    <select name="level" id="E" required>
+                        <option value="1">الاول </option>
+                        <option value="2">الثاني</option>
+                        <option value="3">الثالث</option>
+                        <option value="4">الرابع</option>
+                    </select>
+                    <input type="text" required name="activityName" value="النشاط الرياضي" style="visibility: hidden;">
+                </fieldset>
+            </div>
+            <div class="tex">
+                <h3>عزيزي الطالب ..... عزيزتي الطالبة</h3>
+                <q>اذا كانت لديك الموهبة في ممارسة اي من الانشطة الاتيه
+                    . برجاء اختيار احد هذه المهارات التي تود المشاركة فيه
+                </q>
+            </div>
+            <div class="skills">
+                <fieldset>
+                    <legend>المواهب*</legend>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="1" name="activities[]" value="كرة القدم">
+                        <label for="1">كرة القدم</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="2" name="activities[]" value="كرة السلة">
+                        <label for="2">كرة السلة</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="3" name="activities[]" value="كرة اليد">
+                        <label for="3">كرة اليد</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="4" name="activities[]" value="الكرة الطائرة">
+                        <label for="4">الكرة الطائرة</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="5" name="activities[]" value="الكاراتية">
+                        <label for="5">الكاراتية</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="6" name="activities[]" value="الكونغ فو">
+                        <label for="6">الكونغ فو</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="7" name="activities[]" value="التنس الارضي">
+                        <label for="7">التنس الارضي</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="8" name="activities[]" value="تنس الطاولة">
+                        <label for="8">تنس الطاولة</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="9" name="activities[]" value="السباحة">
+                        <label for="9">السباحة</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="10" name="activities[]" value="المصارعة">
+                        <label for="10">المصارعة</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="11" name="activities[]" value="كمال الاجسام">
+                        <label for="11">كمال الاجسام</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="12" name="activities[]" value="رفع الاثقال">
+                        <label for="12">رفع الاثقال</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="13" name="activities[]" value="العاب القوي">
+                        <label for="13">العاب القوي</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="14" name="activities[]" value="الجودو">
+                        <label for="14">الجودو</label>
+                    </div>
+                    <div class="chek">
+                        <input class="ch" type="checkbox" id="15" name="activities[]" value="كرة السرعة">
+                        <label for="15">كرة السرعة</label>
+                    </div>
+                    <div class="clear"></div>
+                </fieldset>
+            </div>
+            <div class="save">
+                <input type="reset" name="remove" value="محو النموذج">
+                <input type="submit" value="تسجيل" onsubmit="(e)=>{e.preventDefault()}">
+            </div>
+        </form>
+    </div>
+    <script src="submit.js"></script>
+</body>
+
+</html>

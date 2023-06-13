@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Email App</title>
+    <style>
+        /* Style for email sending form */
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin-bottom: 5px;
+        }
+
+        input[type="email"],
+        input[type="text"],
+        textarea {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0062cc;
+        }
+
+        /* Style for email display */
+        .email {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .email p {
+            margin: 0;
+        }
+
+        .email p:first-child {
+            font-weight: bold;
+        }
+
+        /* Style for email reply form */
+        .reply-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 999;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        .reply-form label {
+            margin-bottom: 5px;
+        }
+
+        .reply-form textarea {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            height: 100px;
+        }
+
+        .reply-form input[type="submit"] {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Email App</h1>
+
+    <!-- Email sending form -->
+    <form id="send-email-form">
+        <label for="sender-email">Sender Email:</label>
+        <input type="email" id="sender-email" name="senderEmail" required>
+
+        <label for="recipient-email">Recipient Email:</label>
+        <input type="email" id="recipient-email" name="recipientEmail" required>
+
+        <label for="email-subject">Subject:</label>
+        <input type="text" id="email-subject" name="subject" required>
+
+        <label for="email-body">Message Body:</label>
+        <textarea id="email-body" name="body" required></textarea>
+
+        <input type="submit" value="Send Email">
+    </form>
+
+    <!-- Email reply form -->
+    <form class="reply-form">
+        <label for="reply-body">Reply:</label>
+        <textarea id="reply-body" name="body" required></textarea>
+
+        <input type="hidden" id="reply-subject" name="subject">
+        <input type="hidden" id="reply-messageId" name="messageId">
+        <input type="hidden" id="reply-references" name="references">
+        <input type="hidden" id="reply-recipient-email" name="recipientEmail">
+
+        <input type="submit" value="Send Reply">
+    </form>
+
+    <!-- Email display -->
+    <div id="email-display"></div>
+
+
+
+
+
+
+    <script>
+        // Send email form submission
+        const sendEmailForm = document.getElementById("send-email-form");
+        sendEmailForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(sendEmailForm);
+
+            fetch("https://graduations.onrender.com/api/send-email", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(Object.fromEntries(formData)),
+            })
+                .then(function (response) {
+                    // Handle successful email sending
+                    console.log("Email sent successfully");
+
+                    // Clear the form
+                    sendEmailForm.reset();
+                })
+                .catch(function (error) {
+                    // Handle email sending error
+                    console.error(error);
+                });
+        });
+
+        // Retrieve and display emails
+        fetch("https://graduations.onrender.com/api/get-emails")
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                const emailDisplay = document.getElementById("email-display");
+
+                data.forEach(function (email) {
+                    // Create HTML elements to display email details
+                    const emailElement = document.createElement("div");
+                    emailElement.classList.add("email");
+                    emailElement.innerHTML = `
+  <p>From: ${email.from.text}</p>
+  <p>Subject: ${email.subject}</p>
+  <p>Body: ${email.text}</p>
+  <button class="reply-button reply-btn" data-message-id="${email.messageId}" data-references="${email.references}" data-recipient-email="${email.from.text}" data-subject="${email.subject}">Reply</button>
+`;
+
+                    emailDisplay.appendChild(emailElement);
+                });
+
+                // Add event listener to reply buttons
+                const replyButtons = document.querySelectorAll(".reply-button");
+                replyButtons.forEach(function (button) {
+                    button.addEventListener("click", function (event) {
+                        event.preventDefault();
+
+                        // Show the reply form as a popup
+                        const replyForm = document.querySelector(".reply-form");
+                        replyForm.style.display = "block";
+
+                        // Set the message ID and recipient fields
+                        const replyMessageId = document.getElementById("reply-messageId");
+                        const replyRecipientEmail = document.getElementById("reply-recipient-email");
+                        const replyReferences = document.getElementById("reply-references");
+                        const replySubject = document.getElementById("reply-subject");
+                        replyMessageId.value = button.dataset.messageId;
+                        replyRecipientEmail.value = button.dataset.recipientEmail;
+                        replyReferences.value = button.dataset.references;
+                        replySubject.value = button.dataset.subject;
+
+                        // Hide the email display
+                        const emailDisplay = document.getElementById("email-display");
+                        emailDisplay.style.display = "none";
+                    });
+                });
+            })
+            .catch(function (error) {
+                // Handle email retrieval error
+                console.error(error);
+            });
+
+
+
+
+        // Email reply form submission
+        const replyForm = document.querySelector(".reply-form");
+        replyForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(replyForm);
+
+            fetch("https://graduations.onrender.com/api/reply-email", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(Object.fromEntries(formData)),
+            })
+                .then(function (response) {
+                    // Handle successful email sending
+                    console.log("Email sent successfully");
+
+                    // Hide the reply form
+                    replyForm.style.display = "none";
+
+                    // Clear the form
+                    replyForm.reset();
+                })
+                .catch(function (error) {
+                    // Handle email sending error
+                    console.error(error);
+                });
+        });
+    </script>
+</body>
+
+</html>
